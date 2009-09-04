@@ -34,6 +34,8 @@
         <path location="${build}"/>
 
         <path location="${lib}/clj-apache-http.jar"/>
+        <path location="${lib}/clj-oauth.jar"/>
+        <path location="${lib}/apache-mime4j-0.5.jar"/>
         <path location="${lib}/commons-logging-1.1.1.jar"/>
         <path location="${lib}/httpclient-4.0-beta2.jar"/>
         <path location="${lib}/httpcore-4.0-beta3.jar"/>
