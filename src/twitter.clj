@@ -15,6 +15,7 @@
 
 (def *oauth-consumer* nil)
 (def *oauth-access-token* nil)
+(def *oauth-token-secret* nil)
 (def *protocol* "http")
 
 ;; Get JSON from clj-apache-http 
@@ -23,9 +24,10 @@
 
 (defmacro with-oauth
   "Set the OAuth access token to be used for all contained Twitter requests."
-  [consumer access-token & body]
+  [consumer access-token token-secret & body]
   `(binding [*oauth-consumer* ~consumer
-             *oauth-access-token* ~access-token]
+             *oauth-access-token* ~access-token
+             *oauth-token-secret* ~token-secret]
      (do 
        ~@body)))
 
@@ -56,9 +58,10 @@ take any required and optional arguments and call the associated Twitter method.
                                                                     (vals (sort (select-keys rest-map# 
                                                                                              provided-optional-params#)))))))
              oauth-creds# (when (and *oauth-consumer* 
-                                     *oauth-access-token*) 
+                                     *oauth-access-token*)
                             (oauth/credentials *oauth-consumer*
                                                *oauth-access-token*
+                                               (or *oauth-token-secret* "")
                                                ~req-method
                                                req-uri#
                                                query-params#))]
@@ -321,6 +324,7 @@ take any required and optional arguments and call the associated Twitter method.
                                     (oauth/credentials
                                      *oauth-consumer*
                                      *oauth-access-token*
+                                     (or *oauth-token-secret* "")
                                      :post
                                      req-uri__9408__auto__))]
     ((comp #(:content %) status-handler)
@@ -376,8 +380,9 @@ take any required and optional arguments and call the associated Twitter method.
                                                              *oauth-consumer*
                                                              *oauth-access-token*)
                                                           (oauth/credentials
-                                                           *oauth-consumer*
-                                                           *oauth-access-token*
+                                                            *oauth-consumer*
+                                                            *oauth-access-token*
+                                                            (or *oauth-token-secret* "")
                                                            :post
                                                            req-uri__2571__auto__
                                                            query-params__2576__auto__))]
